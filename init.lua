@@ -864,7 +864,6 @@ require('lazy').setup({
   require 'kickstart.plugins.neo-tree',
   require 'custom.plugins.avante',
   require 'custom.plugins.lazygit',
-  require 'custom.plugins.supermaven',
 
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
