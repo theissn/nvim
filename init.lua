@@ -885,7 +885,7 @@ require('lazy').setup({
       require('catppuccin').setup {
         -- your options here
       }
-      vim.cmd.colorscheme 'catppuccin-mocha'
+      vim.cmd.colorscheme 'catppuccin-frappe'
     end,
   },
 
@@ -959,7 +959,7 @@ require('lazy').setup({
       -- Handle both old ('configs') and new ('config') module names
       local ok, treesitter = pcall(require, 'nvim-treesitter.config')
       if not ok then
-        treesitter = require('nvim-treesitter.configs')
+        treesitter = require 'nvim-treesitter.configs'
       end
       treesitter.setup {
         ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
