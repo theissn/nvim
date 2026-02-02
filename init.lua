@@ -877,35 +877,15 @@ require('lazy').setup({
   },
 
   {
-    'projekt0n/github-nvim-theme',
-    name = 'github-theme',
+    'catppuccin/nvim',
+    name = 'catppuccin',
     lazy = false,
     priority = 1000,
     config = function()
-      require('github-theme').setup {
+      require('catppuccin').setup {
         -- your options here
       }
-    end,
-  },
-
-  {
-    'f-person/auto-dark-mode.nvim',
-    lazy = false,
-    priority = 1001,
-    config = function()
-      require('auto-dark-mode').setup {
-        update_interval = 3000,
-        set_dark_mode = function()
-          vim.api.nvim_set_option_value('background', 'dark', {})
-          vim.cmd.colorscheme 'github_dark_colorblind'
-        end,
-        set_light_mode = function()
-          vim.api.nvim_set_option_value('background', 'light', {})
-          vim.cmd.colorscheme 'github_light_colorblind'
-        end,
-        fallback = 'dark',
-      }
-      require('auto-dark-mode').init()
+      vim.cmd.colorscheme 'catppuccin-mocha'
     end,
   },
 
@@ -975,8 +955,15 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     config = function()
-      -- Install parsers for these languages
-      require('nvim-treesitter').install { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+      -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+      require('nvim-treesitter.configs').setup {
+        ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+        -- Autoinstall languages that are not installed
+        auto_install = true,
+        highlight = {
+          enable = true,
+        },
+      }
     end,
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
