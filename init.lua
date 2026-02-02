@@ -956,7 +956,12 @@ require('lazy').setup({
     build = ':TSUpdate',
     config = function()
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-      require('nvim-treesitter.configs').setup {
+      -- Handle both old ('configs') and new ('config') module names
+      local ok, treesitter = pcall(require, 'nvim-treesitter.config')
+      if not ok then
+        treesitter = require('nvim-treesitter.configs')
+      end
+      treesitter.setup {
         ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
         -- Autoinstall languages that are not installed
         auto_install = true,
