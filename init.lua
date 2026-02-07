@@ -993,27 +993,37 @@ require('lazy').setup({
   -- require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
-  {
-    'nvim-neo-tree/neo-tree.nvim',
-    version = '*',
+  { -- File explorer that lets you edit your filesystem like a buffer
+    'stevearc/oil.nvim',
     dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
-      'MunifTanjim/nui.nvim',
+      'nvim-tree/nvim-web-devicons', -- optional, for file icons
     },
     lazy = false,
     keys = {
-      { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+      { '\\', '<cmd>Oil<CR>', desc = 'Open Oil file explorer', silent = true },
+      { '<leader>e', function() require('oil').toggle_float() end, desc = 'Open Oil in [e]floating window', silent = true },
     },
     opts = {
-      filesystem = {
-        filtered_items = {
-          visible = true,
-        },
-        window = {
-          mappings = {
-            ['\\'] = 'close_window',
-          },
+      default_file_explorer = true,
+      delete_to_trash = true,
+      skip_confirm_for_simple_edits = true,
+      view_options = {
+        show_hidden = true,
+        natural_order = true,
+        is_always_hidden = function(name, _)
+          return name == '..' or name == '.git'
+        end,
+      },
+      win_options = {
+        wrap = true,
+      },
+      float = {
+        padding = 2,
+        max_width = 0.8,
+        max_height = 0.8,
+        border = 'rounded',
+        win_options = {
+          winblend = 0,
         },
       },
     },
