@@ -1,89 +1,3 @@
---[[
-
-=====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
-=====================================================================
-========                                    .-----.          ========
-========         .----------------------.   | === |          ========
-========         |.-""""""""""""""""""-.|   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||   KICKSTART.NVIM   ||   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||                    ||   |-----|          ========
-========         ||:Tutor              ||   |:::::|          ========
-========         |'-..................-'|   |____o|          ========
-========         `"")----------------(""`   ___________      ========
-========        /::::::::::|  |::::::::::\  \ no mouse \     ========
-========       /:::========|  |==hjkl==:::\  \ required \    ========
-========      '""""""""""""'  '""""""""""""'  '""""""""""'   ========
-========                                                     ========
-=====================================================================
-=====================================================================
-
-What is Kickstart?
-
-  Kickstart.nvim is *not* a distribution.
-
-  Kickstart.nvim is a starting point for your own configuration.
-    The goal is that you can read every line of code, top-to-bottom, understand
-    what your configuration is doing, and modify it to suit your needs.
-
-    Once you've done that, you can start exploring, configuring and tinkering to
-    make Neovim your own! That might mean leaving Kickstart just the way it is for a while
-    or immediately breaking it into modular pieces. It's up to you!
-
-    If you don't know anything about Lua, I recommend taking some time to read through
-    a guide. One possible example which will only take 10-15 minutes:
-      - https://learnxinyminutes.com/docs/lua/
-
-    After understanding a bit more about Lua, you can use `:help lua-guide` as a
-    reference for how Neovim integrates Lua.
-    - :help lua-guide
-    - (or HTML version): https://neovim.io/doc/user/lua-guide.html
-
-Kickstart Guide:
-
-  TODO: The very first thing you should do is to run the command `:Tutor` in Neovim.
-
-    If you don't know what this means, type the following:
-      - <escape key>
-      - :
-      - Tutor
-      - <enter key>
-
-    (If you already know the Neovim basics, you can skip this step.)
-
-  Once you've completed that, you can continue working through **AND READING** the rest
-  of the kickstart init.lua.
-
-  Next, run AND READ `:help`.
-    This will open up a help window with some basic information
-    about reading, navigating and searching the builtin help documentation.
-
-    This should be the first place you go to look when you're stuck or confused
-    with something. It's one of my favorite Neovim features.
-
-    MOST IMPORTANTLY, we provide a keymap "<space>sh" to [s]earch the [h]elp documentation,
-    which is very useful when you're not exactly sure of what you're looking for.
-
-  I have left several `:help X` comments throughout the init.lua
-    These are hints about where to find more information about the relevant settings,
-    plugins or Neovim features used in Kickstart.
-
-   NOTE: Look for lines like this
-
-    Throughout the file. These are for you, the reader, to help you understand what is happening.
-    Feel free to delete them once you know what you're doing, but they should serve as a guide
-    for when you are first encountering a few different constructs in your Neovim config.
-
-If you experience any errors while trying to install kickstart, run `:checkhealth` for more info.
-
-I hope you enjoy your Neovim journey,
-- TJ
-
-P.S. You can delete this when you're done too. It's your config now! :)
---]]
-
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -130,6 +44,8 @@ vim.o.smartcase = true
 
 -- Keep signcolumn on by default
 vim.o.signcolumn = 'yes'
+vim.o.relativenumber = true
+vim.o.termguicolors = true
 
 -- Decrease update time
 vim.o.updatetime = 250
@@ -149,8 +65,8 @@ vim.o.splitbelow = true
 --  It is very similar to `vim.o` but offers an interface for conveniently interacting with tables.
 --   See `:help lua-options`
 --   and `:help lua-options-guide`
-vim.o.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.o.list = false
+vim.opt.listchars = { trail = '·', nbsp = '␣' }
 
 -- Preview substitutions live, as you type!
 vim.o.inccommand = 'split'
@@ -165,6 +81,12 @@ vim.o.scrolloff = 10
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
 vim.o.confirm = true
+vim.o.laststatus = 3
+vim.o.showtabline = 0
+vim.o.pumblend = 8
+vim.o.winblend = 0
+vim.opt.fillchars = { eob = ' ', fold = ' ', foldopen = '', foldclose = '' }
+vim.opt.shortmess:append 'c'
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -246,31 +168,8 @@ rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
-  -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
-  'github/copilot.vim', -- GitHub Copilot
 
-  -- NOTE: Plugins can also be added by using a table,
-  -- with the first argument being the link and the following
-  -- keys can be used to configure plugin behavior/loading/etc.
-  --
-  -- Use `opts = {}` to automatically pass options to a plugin's `setup()` function, forcing the plugin to be loaded.
-  --
-
-  -- Alternatively, use `config = function() ... end` for full control over the configuration.
-  -- If you prefer to call `setup` explicitly, use:
-  --    {
-  --        'lewis6991/gitsigns.nvim',
-  --        config = function()
-  --            require('gitsigns').setup({
-  --                -- Your gitsigns configuration here
-  --            })
-  --        end,
-  --    }
-  --
-  -- Here is a more advanced example where we pass configuration
-  -- options to `gitsigns.nvim`.
-  --
   -- See `:help gitsigns` to understand what the configuration keys do
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -284,20 +183,6 @@ require('lazy').setup({
       },
     },
   },
-
-  -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
-  --
-  -- This is often very useful to both group configuration, as well as handle
-  -- lazy loading plugins that don't need to be loaded immediately at startup.
-  --
-  -- For example, in the following configuration, we use:
-  --  event = 'VimEnter'
-  --
-  -- which loads which-key before all the UI elements are loaded. Events can be
-  -- normal autocommands events (`:help autocmd-events`).
-  --
-  -- Then, because we use the `opts` key (recommended), the configuration runs
-  -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
 
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
@@ -405,18 +290,49 @@ require('lazy').setup({
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
       require('telescope').setup {
-        -- You can put your default mappings / updates / etc. in here
-        --  All the info you're looking for is in `:help telescope.setup()`
-        --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
-        -- pickers = {}
+        defaults = {
+          prompt_prefix = '  ',
+          selection_caret = '  ',
+          entry_prefix = '  ',
+          sorting_strategy = 'ascending',
+          layout_strategy = 'horizontal',
+          layout_config = {
+            prompt_position = 'top',
+            width = 0.86,
+            height = 0.82,
+            horizontal = {
+              preview_width = 0.52,
+            },
+          },
+          borderchars = {
+            prompt = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+            results = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+            preview = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+          },
+          mappings = {
+            i = {
+              ['<Esc>'] = require('telescope.actions').close,
+            },
+          },
+        },
+        pickers = {
+          find_files = {
+            hidden = true,
+          },
+          buffers = {
+            theme = 'dropdown',
+            previewer = false,
+            layout_config = {
+              width = 0.65,
+              height = 0.45,
+            },
+          },
+        },
         extensions = {
           ['ui-select'] = {
-            require('telescope.themes').get_dropdown(),
+            require('telescope.themes').get_dropdown {
+              winblend = 0,
+            },
           },
         },
       }
@@ -442,8 +358,12 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>/', function()
         -- You can pass additional configuration to Telescope to change the theme, layout, etc.
         builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-          winblend = 10,
+          winblend = 0,
           previewer = false,
+          layout_config = {
+            width = 0.7,
+            height = 0.45,
+          },
         })
       end, { desc = '[/] Fuzzily search in current buffer' })
 
@@ -631,19 +551,20 @@ require('lazy').setup({
       -- See :help vim.diagnostic.Opts
       vim.diagnostic.config {
         severity_sort = true,
-        float = { border = 'rounded', source = 'if_many' },
+        float = { border = 'rounded', source = 'if_many', header = '', prefix = '' },
         underline = { severity = vim.diagnostic.severity.ERROR },
         signs = vim.g.have_nerd_font and {
           text = {
-            [vim.diagnostic.severity.ERROR] = '󰅚 ',
-            [vim.diagnostic.severity.WARN] = '󰀪 ',
-            [vim.diagnostic.severity.INFO] = '󰋽 ',
-            [vim.diagnostic.severity.HINT] = '󰌶 ',
+            [vim.diagnostic.severity.ERROR] = '▎',
+            [vim.diagnostic.severity.WARN] = '▎',
+            [vim.diagnostic.severity.INFO] = '▎',
+            [vim.diagnostic.severity.HINT] = '▎',
           },
         } or {},
         virtual_text = {
           source = 'if_many',
-          spacing = 2,
+          spacing = 4,
+          prefix = '●',
           format = function(diagnostic)
             local diagnostic_message = {
               [vim.diagnostic.severity.ERROR] = diagnostic.message,
@@ -849,9 +770,31 @@ require('lazy').setup({
       },
 
       completion = {
+        ghost_text = { enabled = false },
+        list = {
+          selection = {
+            preselect = false,
+            auto_insert = false,
+          },
+        },
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
-        documentation = { auto_show = false, auto_show_delay_ms = 500 },
+        documentation = {
+          auto_show = true,
+          auto_show_delay_ms = 250,
+          window = {
+            border = 'rounded',
+          },
+        },
+        menu = {
+          border = 'rounded',
+          draw = {
+            columns = {
+              { 'label', 'label_description', gap = 1 },
+              { 'kind' },
+            },
+          },
+        },
       },
 
       sources = {
@@ -935,8 +878,43 @@ require('lazy').setup({
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
       local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
+      local mode_names = {
+        n = 'NORM',
+        i = 'INS',
+        v = 'VIS',
+        V = 'V-LN',
+        [''] = 'V-BL',
+        c = 'CMD',
+        R = 'REPL',
+        s = 'SEL',
+        S = 'S-LN',
+        t = 'TERM',
+      }
+
+      statusline.setup {
+        use_icons = false,
+        content = {
+          active = function()
+            local mode = mode_names[vim.fn.mode()] or 'NVIM'
+            local git = statusline.section_git { trunc_width = 40 }
+            local diff = statusline.section_diff { trunc_width = 75 }
+            local diagnostics = statusline.section_diagnostics { trunc_width = 75 }
+            local filename = statusline.section_filename { trunc_width = 140 }
+            local fileinfo = statusline.section_fileinfo { trunc_width = 100 }
+            local search = statusline.section_searchcount { trunc_width = 75 }
+            local location = statusline.section_location { trunc_width = 75 }
+
+            return statusline.combine_groups {
+              { hl = 'MiniStatuslineModeNormal', strings = { ' ' .. mode .. ' ' } },
+              { hl = 'MiniStatuslineDevinfo', strings = { git, diff, diagnostics } },
+              '%<',
+              { hl = 'MiniStatuslineFilename', strings = { filename } },
+              '%=',
+              { hl = 'MiniStatuslineFileinfo', strings = { search, fileinfo, location } },
+            }
+          end,
+        },
+      }
 
       -- You can configure sections in the statusline by overriding their
       -- default behavior. For example, here we set the section for
@@ -1013,6 +991,7 @@ require('lazy').setup({
       default_file_explorer = true,
       delete_to_trash = true,
       skip_confirm_for_simple_edits = true,
+      columns = {},
       view_options = {
         show_hidden = true,
         natural_order = true,
@@ -1024,9 +1003,9 @@ require('lazy').setup({
         wrap = true,
       },
       float = {
-        padding = 2,
-        max_width = 0.8,
-        max_height = 0.8,
+        padding = 4,
+        max_width = 0.72,
+        max_height = 0.72,
         border = 'rounded',
         win_options = {
           winblend = 0,
@@ -1077,9 +1056,9 @@ require('lazy').setup({
     opts = {
       -- your configuration comes here
       -- for example
-      enabled = true, -- if you want to enable the plugin
-      message_template = ' <summary> • <date> • <author> • <<sha>>', -- template for the blame message, check the Message template section for more options
-      date_format = '%m-%d-%Y %H:%M:%S', -- template for the date, check Date format section for more options
+      enabled = false, -- if you want to enable the plugin
+      message_template = '  <author>  <date>  <summary>', -- template for the blame message, check the Message template section for more options
+      date_format = '%Y-%m-%d', -- template for the date, check Date format section for more options
       virtual_text_column = 1, -- virtual text start column, check Start virtual text at column section for more options
     },
   },
