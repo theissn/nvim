@@ -46,6 +46,7 @@ end
 
 vim.pack.add({
   gh 'rebelot/kanagawa.nvim',
+  gh 'shaunsingh/nord.nvim',
   gh 'nvim-lua/plenary.nvim',
   gh 'nvim-telescope/telescope.nvim',
   gh 'stevearc/oil.nvim',
@@ -53,23 +54,44 @@ vim.pack.add({
   gh 'stevearc/conform.nvim',
   gh 'folke/lazydev.nvim',
   { src = gh 'saghen/blink.cmp', version = vim.version.range '1' },
+  gh 'lewis6991/gitsigns.nvim',
+  gh 'kdheepak/lazygit.nvim',
   gh 'mason-org/mason.nvim',
   gh 'mason-org/mason-lspconfig.nvim',
   gh 'WhoIsSethDaniel/mason-tool-installer.nvim',
   gh 'neovim/nvim-lspconfig',
 }, { confirm = false })
 
-vim.cmd.colorscheme 'kanagawa'
+-- vim.cmd.colorscheme 'kanagawa-dragon'
+vim.cmd.colorscheme 'nord'
 
 local builtin = require 'telescope.builtin'
-vim.keymap.set('n', '<leader>ff', builtin.find_files)
-vim.keymap.set('n', '<leader>fg', builtin.live_grep)
-vim.keymap.set('n', '<leader>fb', builtin.buffers)
-vim.keymap.set('n', '<leader>fh', builtin.help_tags)
 
-require('oil').setup { view_options = { show_hidden = true } }
+vim.keymap.set('n', '<leader>sf', builtin.find_files)
+vim.keymap.set('n', '<leader>sg', builtin.live_grep)
+vim.keymap.set('n', '<leader><leader>', builtin.buffers)
+vim.keymap.set('n', '<leader>lg', '<cmd>LazyGit<CR>', { desc = 'LazyGit' })
+
+require('oil').setup {
+  columns = {},
+  view_options = { show_hidden = true },
+  float = {
+    padding = 2,
+    max_width = 0.8,
+    max_height = 0.8,
+    border = 'rounded',
+  },
+  win_options = {
+    signcolumn = 'no',
+    number = false,
+    relativenumber = false,
+    wrap = false,
+  },
+}
 vim.keymap.set('n', '-', '<cmd>Oil<CR>', { desc = 'Open parent directory' })
-vim.keymap.set('n', '<leader>e', function() require('oil').toggle_float() end, { desc = 'Open file explorer' })
+vim.keymap.set('n', '<leader>e', function()
+  require('oil').toggle_float()
+end, { desc = 'Open file explorer' })
 
 local ok, treesitter = pcall(require, 'nvim-treesitter.configs')
 if not ok then
@@ -93,6 +115,16 @@ end, { desc = 'Format buffer' })
 require('blink.cmp').setup {
   completion = { documentation = { auto_show = true } },
   fuzzy = { implementation = 'lua' },
+}
+
+require('gitsigns').setup {
+  signs = {
+    add = { text = '+' },
+    change = { text = '~' },
+    delete = { text = '_' },
+    topdelete = { text = '-' },
+    changedelete = { text = '~' },
+  },
 }
 
 require('lazydev').setup()
