@@ -69,6 +69,7 @@ local builtin = require 'telescope.builtin'
 
 vim.keymap.set('n', '<leader>sf', builtin.find_files)
 vim.keymap.set('n', '<leader>sg', builtin.live_grep)
+vim.keymap.set('n', '<leader>sr', builtin.resume)
 vim.keymap.set('n', '<leader><leader>', builtin.buffers)
 vim.keymap.set('n', '<leader>lg', '<cmd>LazyGit<CR>', { desc = 'LazyGit' })
 
