@@ -40,13 +40,31 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Detect Omarchy theme if available
+local omarchy_theme_path = vim.fn.expand("~/.config/omarchy/current/theme/neovim.lua")
+local omarchy_colorscheme = nil
+local omarchy_plugin = nil
+
+if vim.fn.filereadable(omarchy_theme_path) == 1 then
+  local ok, spec = pcall(dofile, omarchy_theme_path)
+  if ok and type(spec) == "table" then
+    for _, item in ipairs(spec) do
+      if type(item) == "table" then
+        if item.opts and item.opts.colorscheme then
+          omarchy_colorscheme = item.opts.colorscheme
+        elseif item[1] and item[1] ~= "LazyVim/LazyVim" then
+          omarchy_plugin = item[1]
+        end
+      end
+    end
+  end
+end
+
 local gh = function(repo)
   return 'https://github.com/' .. repo
 end
 
-vim.pack.add({
-  gh 'rebelot/kanagawa.nvim',
-  gh 'shaunsingh/nord.nvim',
+local plugins = {
   gh 'nvim-lua/plenary.nvim',
   gh 'nvim-telescope/telescope.nvim',
   gh 'stevearc/oil.nvim',
@@ -60,10 +78,21 @@ vim.pack.add({
   gh 'mason-org/mason-lspconfig.nvim',
   gh 'WhoIsSethDaniel/mason-tool-installer.nvim',
   gh 'neovim/nvim-lspconfig',
-}, { confirm = false })
+}
 
--- vim.cmd.colorscheme 'kanagawa-dragon'
-vim.cmd.colorscheme 'nord'
+-- Include Omarchy theme plugin if detected and not already in list
+if omarchy_plugin and omarchy_plugin ~= "rebelot/kanagawa.nvim" and omarchy_plugin ~= "shaunsingh/nord.nvim" then
+  table.insert(plugins, gh(omarchy_plugin))
+end
+
+-- Always include fallback themes
+table.insert(plugins, gh 'rebelot/kanagawa.nvim')
+table.insert(plugins, gh 'shaunsingh/nord.nvim')
+
+vim.pack.add(plugins, { confirm = false })
+
+-- Apply Omarchy colorscheme or fallback to nord
+vim.cmd.colorscheme(omarchy_colorscheme or "nord")
 
 local builtin = require 'telescope.builtin'
 
