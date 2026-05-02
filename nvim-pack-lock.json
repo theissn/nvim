@@ -60,6 +60,10 @@
     "telescope.nvim": {
       "rev": "471eebb1037899fd942cc0f52c012f8773505da1",
       "src": "https://github.com/nvim-telescope/telescope.nvim"
+    },
+    "white.nvim": {
+      "rev": "e3c3c3cc4b943b521032299e4f9b0d84a02e06d1",
+      "src": "https://github.com/bjarneo/white.nvim"
     }
   }
 }

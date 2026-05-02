@@ -81,13 +81,18 @@ local plugins = {
 }
 
 -- Include Omarchy theme plugin if detected and not already in list
-if omarchy_plugin and omarchy_plugin ~= "rebelot/kanagawa.nvim" and omarchy_plugin ~= "shaunsingh/nord.nvim" then
+if omarchy_plugin and omarchy_plugin ~= "rebelot/kanagawa.nvim" and omarchy_plugin ~= "shaunsingh/nord.nvim" and omarchy_plugin ~= "bjarneo/white.nvim" then
   table.insert(plugins, gh(omarchy_plugin))
 end
 
--- Always include fallback themes
-table.insert(plugins, gh 'rebelot/kanagawa.nvim')
-table.insert(plugins, gh 'shaunsingh/nord.nvim')
+-- Always include fallback themes so they're available
+for _, fallback in ipairs {
+  gh 'rebelot/kanagawa.nvim',
+  gh 'shaunsingh/nord.nvim',
+  gh 'bjarneo/white.nvim',
+} do
+  table.insert(plugins, fallback)
+end
 
 vim.pack.add(plugins, { confirm = false })
 
